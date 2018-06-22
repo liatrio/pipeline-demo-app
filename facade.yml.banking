@@ -1,0 +1,41 @@
+---
+#welcome page
+welcome:
+  companyName: Company Name
+  companyLogo: logo.png
+  appName: personal-banking
+  companySlogan: Banking Slogan
+  testimonial: Banking Testimonial
+  articles:
+
+    - article1:
+      fileName: explosives.jsp
+      image: Personal-Banking.jpg
+      name: Personal Banking
+      description: Access your personal checking and savings accounts.
+    - article2:
+      fileName: anvil.jsp
+      image: onlinebanking.jpeg
+      name: Online Banking
+      description: Manage your accounts from nearly anywhere with Online Banking.
+    - article3:
+      fileName: products.jsp
+      image: loans.jpg
+      name: Loans & Lines of Credit
+      description: We will work to help you find the right solutions to fit your unique lifestyle.
+    - article4:
+      fileName: more.jsp
+      image: investment.jpg
+      name: Investment Insights
+      description: Whether you are new to investing or an experienced investor, rely on Investment Insight to provide financial news and information to help you work toward meeting your specific needs and goals.
+css:
+  mainColor: 'fff'
+  mainShade: '5A5A5A'
+  accentColor: '5A5A5A'
+  tileOne: 'E40B19'
+  tileTwo: '0b78e5'
+  tileThree: '00CED1'
+  tileFour: '659bcc'
+  tileFive: '665700'
+  tileSix: '665700'
+  backgroundImage: banker.jpeg

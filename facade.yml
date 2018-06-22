@@ -1,0 +1,24 @@
+---
+welcome:
+  companyName:
+  companyLogo:
+  appName:
+  companySlogan:
+  testimonial:
+  articles:
+    - article1:
+      fileName:
+      image:
+      name:
+      description:
+css:
+  mainColor:
+  mainShade:
+  accentColor:
+  tileOne:
+  tileTwo:
+  tileThree:
+  tileFour:
+  tileFive:
+  tileSix:
+  backgroundImage:

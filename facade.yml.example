@@ -1,0 +1,45 @@
+---
+#welcome page
+welcome:
+  companyName: Some Company
+  companyLogo: some_logo.svg
+  # NOTE: appName should be the name of the war, as well as the match the file paths you will be using
+  appName: personal-banking
+  # Company Slogan is a short blurb to go next to the "find out how" button
+  companySlogan: Company Slogan
+  # Testimonal is some claim to credibility. Usually lifted from "about us"
+  testimonial: Testimonial
+  # articles is an array, and it is recommended you use at least 4 to make the page appear full
+  articles:
+    #each article will become a tile, linking to another static page. TODO: static pages not templated yet
+    - article1:
+      #a relative path to the page specified (located in src/main/webapp/resources/static/<page_name>.jsp)
+      fileName: vwallet.jsp
+      #an image for the tile
+      image: pic09.jpg
+      #the name of the tile
+      name: Page Name
+      #a brief 'hook' for the page
+      description: "Some Description"
+    - article2:
+      fileName: card.jsp
+      image: buble_card.png
+      name: Personal Banking
+      description: "Personal Banking"
+#css
+css:
+  #the primary color of the site, used as the backdrop
+  mainColor: eeba67
+  #a tint (lighter or darker) of the main color for
+  mainShade: fbd1c3
+  # outlines and hover color
+  accentColor: 696a6a
+  # the "cover" color of the article tiles before hovering
+  tileOne: ffa32b
+  tileTwo: 8d82c4
+  tileThree: ec8d81
+  tileFour: e7b788
+  tileFive: 8ea9e8
+  tileSix: 87c5a4
+  # filename for the large backdrop image used for the landing page. Should be located in src/main/webapp/resources/images/<image_name>.extension
+  backgroundImage: banner_rivers.jpg
