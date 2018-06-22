@@ -481,10 +481,6 @@
                             <goal>publish</goal>
                         </goals>
                         <configuration>
-                            <deployProperties>
-                                <gradle>awesome</gradle>
-                                <review.team>qa</review.team>
-                            </deployProperties>
                             <publisher>
                                 <contextUrl>http://artifactory.liatr.io/artifactory</contextUrl>
                                 <repoKey>releases</repoKey>
