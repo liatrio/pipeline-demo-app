@@ -482,7 +482,7 @@
                         </goals>
                         <configuration>
                             <publisher>
-                                <contextUrl>http://artifactory.liatr.io/artifactory</contextUrl>
+                                <contextUrl>https://artifactory.liatr.io/artifactory</contextUrl>
                                 <repoKey>releases</repoKey>
                                 <snapshotRepoKey>snapshots</snapshotRepoKey>
                                 <username>${artifactoryUsername}</username>
