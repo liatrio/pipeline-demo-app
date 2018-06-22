@@ -144,7 +144,7 @@ pipeline {
                 sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
             }
         }
-        stage("Spin down ${APP_NAME} container") {
+        stage("Spin down container") {
             agent any
             steps {
                 script {
