@@ -3,7 +3,7 @@ library 'pipeline-library'
 pipeline {
     agent none
     environment {
-        APP_NAME = ""
+        APP_NAME = "personal-banking"
         PROJECT_NAME = ""
         IMAGE = "${APP_NAME}-demo"
         DEV_IP = "dev.${APP_NAME}.liatr.io"
@@ -13,7 +13,7 @@ pipeline {
         JIRA_URL = 'http://jira.liatr.io'
         ARTIFACTORY_URL = 'https://artifactory.liatr.io'
         BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_NAME}/repos/${APP_NAME}"
-        DOCKER_REPO = "artifactory.liatr.io/${APP_NAME}"
+        DOCKER_REPO = "docker.artifactory.liatr.io"
         AWS_ACCESS_KEY_ID = credentials('AWSaccess')
         AWS_SECRET_ACCESS_KEY = credentials('AWSsecret')
         SNYK_TOKEN = credentials('snyk')
@@ -78,17 +78,17 @@ pipeline {
         stage('Push to Artifactory') {
             agent any
             steps {
-              script {
-                STAGE = env.STAGE_NAME
-                withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
-                        sh "docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${env.ARTIFACTORY_URL}"
+                script {
+                    STAGE = env.STAGE_NAME
+                    withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
+                        sh "docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${DOCKER_REPO}"
                         sh "docker push ${env.DOCKER_REPO}/${env.IMAGE}:${TAG}"
+                    }
+                    slackSend channel: env.SLACK_ROOM, message: "Success: Container pushed to <${env.ARTIFACTORY_URL}/artifactory/webapp/#/artifacts/browse/tree/General/docker-local/${env.IMAGE}/${TAG}|artifactory>"
                 }
-                slackSend channel: env.SLACK_ROOM, message: "Success: Container pushed to <${env.ARTIFACTORY_URL}/artifactory/webapp/#/artifacts/browse/tree/General/${APP_NAME}/${env.IMAGE}/${TAG}|artifactory>"
-              }
             }
         }
-        stage("Run ${APP_NAME} container") {
+        stage('Run container') {
             agent any
             steps {
                 sh "docker network create demo || true"
@@ -100,21 +100,21 @@ pipeline {
                 sh "echo \$(docker inspect --format='{{ .NetworkSettings.Networks.demo.IPAddress }}' \$(docker ps -q --filter name=${APP_NAME})) > APP_IP_ADDRESS"
             }
         }
-        stage('Functional test With Selenium') {
-            agent {
-                docker {
-                    image 'maven:3.5.0'
-                    args '--net demo'
-                }
-            }
-            steps {
-                script { STAGE = env.STAGE_NAME }
-                sh "cd regression-suite && \
-                    mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
-                cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
-                slackSend channel: env.SLACK_ROOM, message: "Success: Functional test complete"
-            }
-        }
+//        stage('Functional test With Selenium') {
+//            agent {
+//                docker {
+//                    image 'maven:3.5.0'
+//                    args '--net demo'
+//                }
+//            }
+//            steps {
+//                script { STAGE = env.STAGE_NAME }
+//                sh "cd regression-suite && \
+//                mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
+//                cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
+//                slackSend channel: env.SLACK_ROOM, message: "Success: Functional test complete"
+//            }
+//        }
         stage('Performance test with Gatling') {
             agent {
                 docker {
@@ -144,7 +144,7 @@ pipeline {
                 sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
             }
         }
-        stage("Spin down ${APP_NAME} container") {
+        stage('Spin down container') {
             agent any
             steps {
                 script {
@@ -196,7 +196,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
                     withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
                         script {
-                            sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${DEV_IP} docker login -u ${artifactoryUsername} -p ${artifactoryPassword} ${env.ARTIFACTORY_URL}"
+                            sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${DEV_IP} docker login -u ${artifactoryUsername} -p ${artifactoryPassword} ${DOCKER_REPO}"
                         }
                     }
                     sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${DEV_IP} docker pull ${DOCKER_REPO}/${env.IMAGE}:${TAG}"
@@ -215,25 +215,25 @@ pipeline {
                 slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: Deployed to http://${DEV_IP}/${APP_NAME} - waiting on Smoke Test"
             }
         }
-        stage('Selenium smoke test') {
-            agent {
-                docker {
-                    image 'maven:3.5.0'
-                }
-            }
-            steps {
-                script {
-                    STAGE = env.STAGE_NAME
-                    sh "cd regression-suite && \
-                    mvn clean -B test -DPETCLINIC_URL=http://${DEV_IP}/${APP_NAME}/ -Dcucumber.options='--tags @smoke'"
-                    slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: smoke-test completed."
-                    if (env.GIT_BRANCH =~ /(PR-[0-9]+)/)
-                        slackSend channel: env.SLACK_ROOM, color: 'good', message: "PR is <${BITBUCKET_URL}/pull-requests|ready to merge>"
-                    else if (env.GIT_BRANCH != 'master')
-                        slackSend channel: env.SLACK_ROOM, color: 'good', message: "Ready to <${BITBUCKET_URL}/pull-requests?create&targetBranch=refs%2Fheads%2Fmaster&sourceBranch=refs%2Fheads%2F${env.GIT_BRANCH}|create a PR>?"
-                }
-            }
-        }
+//        stage('Selenium smoke test') {
+//            agent {
+//                docker {
+//                    image 'maven:3.5.0'
+//                }
+//            }
+//            steps {
+//                script {
+//                    STAGE = env.STAGE_NAME
+//                    sh "cd regression-suite && \
+//                    mvn clean -B test -DPETCLINIC_URL=http://${DEV_IP}/${APP_NAME}/ -Dcucumber.options='--tags @smoke'"
+//                    slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: smoke-test completed."
+//                    if (env.GIT_BRANCH =~ /(PR-[0-9]+)/)
+//                        slackSend channel: env.SLACK_ROOM, color: 'good', message: "PR is <${BITBUCKET_URL}/pull-requests|ready to merge>"
+//                    else if (env.GIT_BRANCH != 'master')
+//                        slackSend channel: env.SLACK_ROOM, color: 'good', message: "Ready to <${BITBUCKET_URL}/pull-requests?create&targetBranch=refs%2Fheads%2Fmaster&sourceBranch=refs%2Fheads%2F${env.GIT_BRANCH}|create a PR>?"
+//                }
+//            }
+//        }
         stage("Ready to destroy ephemeral environment?") {
             agent any
             when { not { branch 'master' } }

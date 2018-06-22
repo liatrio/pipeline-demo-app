@@ -481,12 +481,8 @@
                             <goal>publish</goal>
                         </goals>
                         <configuration>
-                            <deployProperties>
-                                <gradle>awesome</gradle>
-                                <review.team>qa</review.team>
-                            </deployProperties>
                             <publisher>
-                                <contextUrl>http://artifactory.liatr.io/artifactory</contextUrl>
+                                <contextUrl>https://artifactory.liatr.io/artifactory</contextUrl>
                                 <repoKey>releases</repoKey>
                                 <snapshotRepoKey>snapshots</snapshotRepoKey>
                                 <username>${artifactoryUsername}</username>
