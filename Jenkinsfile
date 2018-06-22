@@ -13,7 +13,7 @@ pipeline {
         JIRA_URL = 'http://jira.liatr.io'
         ARTIFACTORY_URL = 'https://artifactory.liatr.io'
         BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_NAME}/repos/${APP_NAME}"
-        DOCKER_REPO = "artifactory.liatr.io/${APP_NAME}"
+        DOCKER_REPO = "docker.artifactory.liatr.io"
         AWS_ACCESS_KEY_ID = credentials('AWSaccess')
         AWS_SECRET_ACCESS_KEY = credentials('AWSsecret')
         SNYK_TOKEN = credentials('snyk')
@@ -78,17 +78,17 @@ pipeline {
         stage('Push to Artifactory') {
             agent any
             steps {
-              script {
-                STAGE = env.STAGE_NAME
-                withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
-                        sh "docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${env.ARTIFACTORY_URL}"
+                script {
+                    STAGE = env.STAGE_NAME
+                    withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
+                        sh "docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${DOCKER_REPO}"
                         sh "docker push ${env.DOCKER_REPO}/${env.IMAGE}:${TAG}"
+                    }
+                    slackSend channel: env.SLACK_ROOM, message: "Success: Container pushed to <${env.ARTIFACTORY_URL}/artifactory/webapp/#/artifacts/browse/tree/General/docker-local/${env.IMAGE}/${TAG}|artifactory>"
                 }
-                slackSend channel: env.SLACK_ROOM, message: "Success: Container pushed to <${env.ARTIFACTORY_URL}/artifactory/webapp/#/artifacts/browse/tree/General/${APP_NAME}/${env.IMAGE}/${TAG}|artifactory>"
-              }
             }
         }
-        stage("Run container") {
+        stage('Run container') {
             agent any
             steps {
                 sh "docker network create demo || true"
@@ -110,7 +110,7 @@ pipeline {
             steps {
                 script { STAGE = env.STAGE_NAME }
                 sh "cd regression-suite && \
-                    mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
+                mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
                 cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
                 slackSend channel: env.SLACK_ROOM, message: "Success: Functional test complete"
             }
@@ -144,7 +144,7 @@ pipeline {
                 sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
             }
         }
-        stage("Spin down container") {
+        stage('Spin down container') {
             agent any
             steps {
                 script {
@@ -196,7 +196,7 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
                     withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
                         script {
-                            sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${DEV_IP} docker login -u ${artifactoryUsername} -p ${artifactoryPassword} ${env.ARTIFACTORY_URL}"
+                            sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${DEV_IP} docker login -u ${artifactoryUsername} -p ${artifactoryPassword} ${DOCKER_REPO}"
                         }
                     }
                     sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${DEV_IP} docker pull ${DOCKER_REPO}/${env.IMAGE}:${TAG}"
