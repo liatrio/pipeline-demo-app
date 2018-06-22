@@ -88,7 +88,7 @@ pipeline {
               }
             }
         }
-        stage("Run ${APP_NAME} container") {
+        stage("Run container") {
             agent any
             steps {
                 sh "docker network create demo || true"
