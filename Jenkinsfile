@@ -3,7 +3,7 @@ library 'pipeline-library'
 pipeline {
     agent none
     environment {
-        APP_NAME = ""
+        APP_NAME = "personal-banking"
         PROJECT_NAME = ""
         IMAGE = "${APP_NAME}-demo"
         DEV_IP = "dev.${APP_NAME}.liatr.io"
