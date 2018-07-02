@@ -3,8 +3,8 @@ library 'pipeline-library'
 pipeline {
     agent none
     environment {
-        APP_NAME = "personal-banking"
-        PROJECT_NAME = ""
+        APP_NAME = "__APP_NAME__"
+        PROJECT_KEY = "__PROJECT_KEY__"
         IMAGE = "${APP_NAME}-demo"
         DEV_IP = "dev.${APP_NAME}.liatr.io"
         SONAR_URL = 'http://sonarqube.liatr.io'
@@ -12,7 +12,7 @@ pipeline {
         JIRA_ISSUE = ''
         JIRA_URL = 'http://jira.liatr.io'
         ARTIFACTORY_URL = 'https://artifactory.liatr.io'
-        BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_NAME}/repos/${APP_NAME}"
+        BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_KEY}/repos/${APP_NAME}"
         DOCKER_REPO = "docker.artifactory.liatr.io"
         AWS_ACCESS_KEY_ID = credentials('AWSaccess')
         AWS_SECRET_ACCESS_KEY = credentials('AWSsecret')
@@ -22,7 +22,7 @@ pipeline {
         ARTIFACT_ID = ''
         VERSION = ''
         STAGE = ''
-        SLACK_ROOM = "${APP_NAME}-demo"
+        SLACK_ROOM = "${APP_NAME}"
     }
     stages {
         stage('Build') {
