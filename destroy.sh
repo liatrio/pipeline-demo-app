@@ -12,6 +12,6 @@ export TF_WORKSPACE=$TF_VAR_instance_name
 terraform workspace new $TF_VAR_instance_name
 
 # destroy the instance
-terraform destroy -auto-approve
+terraform destroy -input=false -auto-approve=true
 
 exit $EXIT_STATUS
