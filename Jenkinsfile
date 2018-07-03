@@ -175,7 +175,7 @@ pipeline {
                 }
             }
         }
-        stage("Provisioning Environment") {
+        stage("Provisioning Dev Environment") {
             agent any
             steps {
                 script {
@@ -183,7 +183,7 @@ pipeline {
                     DEV_IP = "${env.BRANCH_NAME}.${APP_NAME}.liatr.io"
                 }
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
-                    slackSend channel: env.SLACK_ROOM, message: "Provisioning environment"
+                    slackSend channel: env.SLACK_ROOM, message: "Provisioning dev environment"
                     sh "export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_instance_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME} && ./terraform.sh"
                 }
             }
