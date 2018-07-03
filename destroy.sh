@@ -5,6 +5,9 @@ workspace=$(dirname 0)
 #this is necessary for using remote state storage
 terraform init -input=false
 
+#check terraform version
+terraform --version
+
 #create workspace
 export TF_WORKSPACE=$TF_VAR_instance_name
 
