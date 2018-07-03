@@ -256,7 +256,7 @@ pipeline {
             steps {
                 script { STAGE = env.STAGE_NAME }
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
-                    sh "export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_instance_name=${env.BRANCH_NAME} && ./destroy.sh"
+                    sh "export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_instance_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME} && ./destroy.sh"
                     slackSend channel: env.SLACK_ROOM, message: "Deleted feature branch environment"
                 }
             }
