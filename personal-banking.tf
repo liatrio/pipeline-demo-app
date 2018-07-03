@@ -20,7 +20,11 @@ variable "tag" {
 }
 
 variable "instance_name" {
-    description = "This is used to run the personal banking"
+    description = "Name of branch that is being deployed"
+}
+
+variable "app_name" {
+    description = "Name given to this application instance"
 }
 
 variable "ami_id" {
@@ -73,7 +77,7 @@ data "aws_route53_zone" "liatrio" {
 
 resource "aws_route53_record" "personal-banking-env" {
   zone_id = "${data.aws_route53_zone.liatrio.zone_id}"
-  name    = "${var.instance_name}.personal-banking.liatr.io"
+  name    = "${var.instance_name}.${var.app_name}.liatr.io"
   type    = "A"
   ttl     = "300"
   records = ["${aws_instance.personal-banking-env.public_ip}"]
