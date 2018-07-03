@@ -16,9 +16,9 @@
 
 <!-- Header -->
 <header id="header" class="alt">
-	<a href="/" class="logo" style="color:#5A5A5A"><strong><%= welcomeSpec['companyName'] %></strong></a>
+  <a href="/" class="logo"><strong><%= welcomeSpec['companyName'] %></strong></a>
 	<nav>
-		<a href="#menu" style="color:#5A5A5A">Menu</a>
+		<a href="#menu">Menu</a>
 	</nav>
 </header>
 
@@ -27,7 +27,7 @@
 	<ul class="links">
         <li><a href=<%= "/#{welcomeSpec['appName']}" %>>Home</a></li>
         <% welcomeSpec['articles'].each do |article| %>
-            <li><a href=<%="/#{welcomeSpec['appName']}/resources/static/#{article['fileName']}"%> style="color:#5A5A5A"><%="#{article['name']}"%></a></li>
+            <li><a href=<%="/#{welcomeSpec['appName']}/resources/static/#{article['fileName']}"%> ><%="#{article['name']}"%></a></li>
         <% end %>
 	</ul>
 	<ul class="actions vertical">
@@ -43,9 +43,9 @@
                 <h1><img src=<%= "/#{welcomeSpec['appName']}/resources/images/#{welcomeSpec['companyLogo']}" %> style="width: 30%;"/></h1>
             </header>
             <div class="content">
-                <p style="text-transform: uppercase; color:#5A5A5A"> <%= welcomeSpec['companySlogan'] %></p>
+                <p style="text-transform: uppercase"> <%= welcomeSpec['companySlogan'] %></p>
                 <ul class="actions">
-                    <li><a href="#one" style="color:#5A5A5A" class="button next scrolly">Find out How</a></li>
+                    <li><a href="#one" class="button next scrolly">Find out How</a></li>
                 </ul>
             </div>
         </div>
@@ -97,24 +97,24 @@
 <section id="contact">
 	<div class="inner">
 		<section>
-      <center> <h2 style="color:#ACACAC"> Get in touch </h2> </center>
+      <center> <h2> Get in touch </h2> </center>
 			<!--<form action="https:/formspree.io/youremailaddress@gmail.com" method="POST">-->
       <form action="#" method="POST" id="contactForm">
 				<div class="field half first">
-					<label for="name" style="color:#ACACAC">Name</label>
+					<label for="name">Name</label>
 					<input type="text" name="name" id="name" required/>
 				</div>
 				<div class="field half">
-					<label for="email" style="color:#ACACAC">Email</label>
+					<label for="email">Email</label>
 					<input type="text" name="_replyto" id="email" required/>
 				</div>
 				<div class="field">
-					<label for="message" style="color:#ACACAC">Message</label>
+					<label for="message">Message</label>
 					<textarea name="message" id="message" rows="6" required></textarea>
 				</div>
 				<ul class="actions">
-					<li><input type="submit" value="Send Message" class="special" style="color:#ACACAC" /></li>
-					<li><input type="reset" value="Clear" style="color:#ACACAC" /></li>
+					<li><input type="submit" value="Send Message" class="special" id="sendMessageButton" /></li>
+					<li><input type="reset" value="Clear"  id="clearButton" /></li>
 				</ul>
 			</form>
 		</section>
@@ -122,22 +122,22 @@
 			<section>
 				<div class="contact-method">
 					<span class="icon alt fa-envelope"></span>
-					<h3 style="color:#ACACAC">Email</h3>
-					<a href="#" style="color:#ACACAC">customerservice@devops.com</a>
+					<h3 id="contactEmail">Email</h3>
+					<a href="#" id="contactEmailLink">customerservice@devops.com</a>
 				</div>
 			</section>
 			<section>
 				<div class="contact-method">
 					<span class="icon alt fa-phone"></span>
-					<h3 style="color:#ACACAC">Phone</h3>
-					<span style="color:#ACACAC">1-800-DEV-OPS</span>
+					<h3 id="contactPhone">Phone</h3>
+					<span id="contactPhoneLink">1-800-DEV-OPS</span>
 				</div>
 			</section>
 			<section>
 				<div class="contact-method">
 					<span class="icon alt fa-home"></span>
-					<h3 style="color:#ACACAC">Address</h3>
-					<span style="color:#ACACAC">
+					<h3 id="contactAddress">Address</h3>
+					<span id="contactAddressLink">
 					    1234 Cloud Ave<br />
 					    Somewhere,
 					    CA
@@ -155,10 +155,10 @@
 		<div class="inner">
           <center>
     		<ul class="icons">
-    		   <li><a href="https:/twitter.com/" class="icon alt fa-twitter" target="_blank" style="color:#ACACAC"><span class="label" style="color:#ACACAC">Twitter</span></a></li>
-    		   <li><a href="https:/plus.google.com/" class="icon alt fa-google-plus" target="_blank" style="color:#ACACAC"><span class="label" style="color:#ACACAC">Google+</span></a></li>
-    		   <li><a href="https:/instagram.com" class="icon alt fa-instagram" target="_blank" style="color:#ACACAC"><span class="label" style="color:#ACACAC">Instagram</span></a></li>
-               <li><a href="https:/facebook.com" class="icon alt fa-facebook" target="_blank" style="color:#ACACAC"><span class="label" style="color:#ACACAC">Facebook</span></a></li>
+    		   <li><a href="https:/twitter.com/" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+    		   <li><a href="https:/plus.google.com/" class="icon alt fa-google-plus" target="_blank"><span class="label">Google+</span></a></li>
+    		   <li><a href="https:/instagram.com" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+           <li><a href="https:/facebook.com" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
     	    </ul>
           </center>
 		</div>

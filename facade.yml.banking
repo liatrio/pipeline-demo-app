@@ -1,7 +1,7 @@
 ---
 #welcome page
 welcome:
-  companyName: Company Name
+  companyName: Company Name # Name of the company. Appears in the top left corner of app
   companyLogo: logo.png
   appName: personal-banking
   companySlogan: Banking Slogan
@@ -10,32 +10,51 @@ welcome:
 
     - article1:
       fileName: explosives.jsp
-      image: Personal-Banking.jpg
+      image: Personal-Banking.jpg # <--Top left tile picture
       name: Personal Banking
       description: Access your personal checking and savings accounts.
     - article2:
       fileName: anvil.jsp
-      image: onlinebanking.jpeg
+      image: onlinebanking.jpeg # <--Top right tile picture
       name: Online Banking
       description: Manage your accounts from nearly anywhere with Online Banking.
     - article3:
       fileName: products.jsp
-      image: loans.jpg
+      image: loans.jpg # <--Bottom left tile picture
       name: Loans & Lines of Credit
       description: We will work to help you find the right solutions to fit your unique lifestyle.
     - article4:
       fileName: more.jsp
-      image: investment.jpg
+      image: investment.jpg # <--Bottom right tile picture
       name: Investment Insights
       description: Whether you are new to investing or an experienced investor, rely on Investment Insight to provide financial news and information to help you work toward meeting your specific needs and goals.
 css:
   mainColor: 'fff'
   mainShade: '5A5A5A'
   accentColor: '5A5A5A'
-  tileOne: 'E40B19'
-  tileTwo: '0b78e5'
-  tileThree: '00CED1'
-  tileFour: '659bcc'
+  tileOne: 'E40B19' # <--Top left tile color
+  tileTwo: '0b78e5' # <--Top right tile color
+  tileThree: '00CED1' # <--Bottom left tile color
+  tileFour: '659bcc' # <--Bottom right tile color
   tileFive: '665700'
   tileSix: '665700'
-  backgroundImage: banker.jpeg
+  companyNameShade: 'CCCAAA'
+  companyNameShadeHover: 'CCCAAA'
+  menuShade: 'CCCAAA'
+  menuDropDown: '5A5A5A'
+  slogan: '5A5A5A'
+  findOutHow: '5A5A5A'
+  becomeMember: 'fff'
+  testimonial: 'fff'
+  getStarted: 'fff'
+  getInTouch: '5A5A5A'
+  nameEmailMessage: '5A5A5A'
+  contactEmail: '5A5A5A'
+  contactPhone: '5A5A5A'
+  contactAddress: '5A5A5A'
+  sendMessageButton: '5A5A5A'
+  clearButton: '5A5A5A'
+  textBoxBorder: 'CCCAAA'
+  iconShade: 'CCCAAA'
+  iconShadeHover: '5A5A5A'
+  backgroundImage: banker.jpeg # <--Background photo behind logo & testimonial
