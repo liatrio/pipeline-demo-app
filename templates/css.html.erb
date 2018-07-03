@@ -28,7 +28,7 @@
 	}
 
   a:hover {
-    color: <%= "##{cssSpec['accentColor']}" %> !important;
+    color: <%= "##{cssSpec['mainShade']}" %> !important;
   }
 
 	ol, ul {
@@ -1689,11 +1689,11 @@
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: <%= "##{cssSpec['accentColor']}" %> !important;
+			color: <%= "##{cssSpec['mainShade']}" %> !important;
 		}
 
 		a:active {
-			color: <%= "##{cssSpec['accentColor']}" %> !important;
+			color: <%= "##{cssSpec['mainShade']}" %> !important;
 		}
 
 	strong, b {
@@ -1981,8 +1981,8 @@
 		input[type="tel"]:focus,
 		select:focus,
 		textarea:focus {
-			border-color: <%= "##{cssSpec['accentColor']}" %>;
-			box-shadow: 0 0 0 2px <%="##{cssSpec['accentColor']}" %>;
+			border-color: <%= "##{cssSpec['textBoxBorder']}" %>;
+			box-shadow: 0 0 0 2px <%="##{cssSpec['textBoxBorder']}" %>;
 		}
 
 	.select-wrapper {
@@ -2082,15 +2082,14 @@
 
 		input[type="checkbox"]:checked + label:before,
 		input[type="radio"]:checked + label:before {
-			background: #ffffff;
-			border-color: <%= "##{cssSpec['accentColor']}" %>;
+			border-color: <%= "##{cssSpec['mainShade']}" %>;
 			content: '\f00c';
 			color: <%= "##{cssSpec['mainColor']}" %>;
 		}
 
 		input[type="checkbox"]:focus + label:before,
 		input[type="radio"]:focus + label:before {
-			box-shadow: 0 0 0 2px <%= "##{cssSpec['accentColor']}" %>;
+			box-shadow: 0 0 0 2px <%= "##{cssSpec['mainShade']}" %>;
 		}
 
 	input[type="radio"] + label:before {
@@ -2166,8 +2165,7 @@
 		.icon.alt:before {
 			background-color: #ffffff;
 			border-radius: 100%;
-		/*	color: <%= "##{cssSpec['mainColor']}" %>;*/
-			color: #ACACAC;
+			color: <%= "##{cssSpec['iconShade']}" %>;
 			display: inline-block;
 			height: 2em;
 			line-height: 2em;
@@ -2183,11 +2181,11 @@
 	}
 
 	a.icon.alt:hover:before {
-		background-color: <%= "##{cssSpec['accentColor']}" %>;
+		background-color: <%= "##{cssSpec['iconShadeHover']}" %>;
 	}
 
 	a.icon.alt:active:before {
-		background-color: <%= "##{cssSpec['accentColor']}" %>;
+		background-color: <%= "##{cssSpec['iconShade']}" %>;
 	}
 
 /* Image */
@@ -2498,8 +2496,8 @@
 		button:active,
 		.button:hover,
 		.button:active {
-			box-shadow: inset 0 0 0 2px <%= "##{cssSpec['accentColor']}" %>;
-			color: <%= "##{cssSpec['accentColor']}" %>;
+			box-shadow: inset 0 0 0 2px <%= "##{cssSpec['mainShade']}" %>;
+			color: <%= "##{cssSpec['mainShade']}" %>;
 		}
 
 		input[type="submit"]:active,
@@ -2508,8 +2506,8 @@
 		button:active,
 		.button:active {
 			background-color: rgb(255, 163, 43, 0.1);
-			box-shadow: inset 0 0 0 2px <%= "##{cssSpec['accentColor']}" %>;
-			color: <%= "##{cssSpec['accentColor']}" %>;
+			box-shadow: inset 0 0 0 2px <%= "##{cssSpec['mainShade']}" %>;
+			color: <%= "##{cssSpec['mainShade']}" %>;
 		}
 
 		input[type="submit"].icon:before,
@@ -2596,7 +2594,7 @@
 			input[type="button"].next:after,
 			button.next:after,
 			.button.next:after {
-				background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='36px' height='24px' viewBox='0 0 36 24' zoomAndPan='disable'%3E%3Cstyle%3Eline %7B stroke: %23<%= cssSpec['accentColor'] %>%3B stroke-width: 2px%3B %7D%3C/style%3E%3Cline x1='0' y1='12' x2='34' y2='12' /%3E%3Cline x1='25' y1='4' x2='34' y2='12.5' /%3E%3Cline x1='25' y1='20' x2='34' y2='11.5' /%3E%3C/svg%3E");
+				background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='36px' height='24px' viewBox='0 0 36 24' zoomAndPan='disable'%3E%3Cstyle%3Eline %7B stroke: %23<%= cssSpec['mainShade'] %>%3B stroke-width: 2px%3B %7D%3C/style%3E%3Cline x1='0' y1='12' x2='34' y2='12' /%3E%3Cline x1='25' y1='4' x2='34' y2='12.5' /%3E%3Cline x1='25' y1='20' x2='34' y2='11.5' /%3E%3C/svg%3E");
 				opacity: 0;
 				z-index: 1;
 			}
@@ -2632,7 +2630,7 @@
 		.button.special {
 			background-color: #ffffff;
 			box-shadow: none;
-			color: <%= "##{cssSpec['mainColor']}" %>;
+			color: <%= "##{cssSpec['mainShade']}" %>;
 		}
 
 			input[type="submit"].special:hover, input[type="submit"].special:active,
@@ -2644,7 +2642,7 @@
 			button.special:active,
 			.button.special:hover,
 			.button.special:active {
-				background-color: <%= "##{cssSpec['accentColor']}" %>;
+				background-color: <%= "##{cssSpec['mainShade']}" %>;
 				color: <%= "##{cssSpec['mainColor']}" %> !important;
 			}
 
@@ -2653,7 +2651,7 @@
 			input[type="button"].special:active,
 			button.special:active,
 			.button.special:active {
-				background-color: <%= "##{cssSpec['accentColor']}" %>;
+				background-color: <%= "##{cssSpec['mainShade']}" %>;
 			}
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
@@ -3076,7 +3074,7 @@
 		display: -webkit-flex;
 		display: -ms-flex;
 		display: flex;
-		background-color: <%= "##{cssSpec['mainShade']}" %>;
+		background-color: <%= "##{cssSpec['menuDropDown']}" %>;
 		box-shadow: 0 0 0.25em 0 rgba(0, 0, 0, 0.15);
 		cursor: default;
 		font-weight: 600;
@@ -3106,7 +3104,7 @@
 				-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 				-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 				transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-				color: <%= "##{cssSpec['accentColor']}" %>;
+				color: <%= "##{cssSpec['companyNameShade']}" %>;
 				display: inline-block;
 				line-height: 1.65em;
 				margin-right: 0.325em;
@@ -3114,11 +3112,11 @@
 			}
 
 			#header .logo:hover strong {
-				background-color: <%= "##{cssSpec['accentColor']}" %>;
+				background-color: <%= "##{cssSpec['companyNameShadeHover']}" %>;
 			}
 
 			#header .logo:active strong {
-				background-color: <%= "##{cssSpec['accentColor']}" %>;
+				background-color: <%= "##{cssSpec['companyNameShade']}" %>;
 			}
 
 		#header nav {
@@ -3177,7 +3175,7 @@
 						-webkit-transition: opacity 0.2s ease-in-out;
 						-ms-transition: opacity 0.2s ease-in-out;
 						transition: opacity 0.2s ease-in-out;
-						background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='32' viewBox='0 0 24 32' preserveAspectRatio='none'%3E%3Cstyle%3Eline %7B stroke-width: 2px%3B stroke: %23<%= cssSpec['accentColor'] %>%3B %7D%3C/style%3E%3Cline x1='0' y1='11' x2='24' y2='11' /%3E%3Cline x1='0' y1='21' x2='24' y2='21' /%3E%3Cline x1='0' y1='16' x2='24' y2='16' /%3E%3C/svg%3E");
+						background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='32' viewBox='0 0 24 32' preserveAspectRatio='none'%3E%3Cstyle%3Eline %7B stroke-width: 2px%3B stroke: %23<%= cssSpec['menuShade'] %>%3B %7D%3C/style%3E%3Cline x1='0' y1='11' x2='24' y2='11' /%3E%3Cline x1='0' y1='21' x2='24' y2='21' /%3E%3Cline x1='0' y1='16' x2='24' y2='16' /%3E%3C/svg%3E");
 						opacity: 0;
 						z-index: 1;
 					}
@@ -3219,6 +3217,10 @@
 			position: absolute;
 		}
 
+			#header.alt a[href="/"] {
+				color: <%= "##{cssSpec['menuShade']}" %>;
+			}
+
 			#header.alt.style1 .logo strong {
 				color: <%= "##{cssSpec['tileOne']}" %>;
 			}
@@ -3251,6 +3253,7 @@
 
 			#header nav a[href="#menu"] {
 				padding-right: 3.75em !important;
+					color: <%= "##{cssSpec['menuShade']}" %>;
 			}
 
 				#header nav a[href="#menu"]:last-child {
@@ -3295,7 +3298,7 @@
 					}
 
             #header nav a[href="#menu"]:hover {
-  						color: <%= "##{cssSpec['accentColor']}" %> !important;
+  						color: <%= "##{cssSpec['menuShade']}" %> !important;
   					}
 
 						#header nav a[href="#menu"]:before, #header nav a[href="#menu"]:after {
@@ -3327,7 +3330,7 @@
 			}
 
       #header nav a[href="menu"]:hover {
-        color: <%= "##{cssSpec['accentColor']}" %> !important;
+        color: <%= "##{cssSpec['menuShade']}" %> !important;
       }
 
 				#header nav a[href="#menu"]:before, #header nav a[href="#menu"]:after {
@@ -3450,6 +3453,12 @@
 					font-weight: 600;
 					letter-spacing: 0.25em;
 					text-transform: uppercase;
+			    color: <%= "##{cssSpec['slogan']}" %>;
+				}
+        
+        
+				#banner > .inner .content .actions li a {
+			    color: <%= "##{cssSpec['findOutHow']}" %>;
 				}
 
 		#banner.major {
@@ -3578,6 +3587,18 @@
 				max-width: 65em;
 				width: calc(100% - 6em);
 			}
+      
+      #main > * > .inner > .major h2 {
+		    color: <%= "##{cssSpec['becomeMember']}" %>;
+			}
+
+      #main > * > .inner p {
+		    color: <%= "##{cssSpec['testimonial']}" %>;
+			}
+
+      #main > * > .inner > .actions li a {
+		    color: <%= "##{cssSpec['getStarted']}" %>;
+			}
 
 				@media screen and (max-width: 736px) {
 
@@ -3608,6 +3629,14 @@
 			padding: 0 !important;
 		}
 
+			#contact > .inner h2 {
+		    color: <%= "##{cssSpec['getInTouch']}" %>;
+			}
+
+      #contact > .inner form div label {
+		    color: <%= "##{cssSpec['nameEmailMessage']}" %>;
+			}
+
 			#contact > .inner > :nth-child(2n - 1) {
 				padding: 4em 3em 2em 0 ;
 				border-right: solid 2px <%= "rgba(255,255,255,0.25)" %>;
@@ -3626,6 +3655,38 @@
 				#contact > .inner > .split > * {
 					padding: 3em 0 1em 3em ;
 					position: relative;
+				}
+
+        #contactEmail {
+		      color: <%= "##{cssSpec['contactEmail']}" %>;
+				}
+
+        #contactEmailLink {
+		      color: <%= "##{cssSpec['contactEmail']}" %>;
+				}
+
+        #contactPhone {
+		      color: <%= "##{cssSpec['contactPhone']}" %>;
+				}
+
+        #contactPhoneLink {
+		      color: <%= "##{cssSpec['contactPhone']}" %>;
+				}
+
+        #contactAddress {
+		      color: <%= "##{cssSpec['contactAddress']}" %>;
+				}
+
+        #contactAddressLink {
+		      color: <%= "##{cssSpec['contactAddress']}" %>;
+				}
+
+        #sendMessageButton {
+		      color: <%= "##{cssSpec['sendMessageButton']}" %>;
+				}
+
+        #clearButton {
+		      color: <%= "##{cssSpec['clearButton']}" %>;
 				}
 
 					#contact > .inner > .split > *:before {
@@ -3825,6 +3886,7 @@
 
 				#menu ul.links > li {
 					padding: 0;
+          color: <%= "##{cssSpec['mainShade']}" %>;
 				}
 
 					#menu ul.links > li > a:not(.button) {
@@ -3837,15 +3899,18 @@
 						line-height: 4em;
 						text-decoration: none;
 						text-transform: uppercase;
+            color: <%= "##{cssSpec['mainShade']}" %>;
 					}
 
 					#menu ul.links > li > .button {
 						display: block;
 						margin: 0.5em 0 0 0;
+            color: <%= "##{cssSpec['mainShade']}" %>;
 					}
 
 					#menu ul.links > li:first-child > a:not(.button) {
 						border-top: 0 !important;
+            color: <%= "##{cssSpec['mainShade']}" %>;
 					}
 
 		#menu .close {
@@ -3872,7 +3937,7 @@
 		}
 
     #menu .close:hover {
-		  color: <%= "##{cssSpec['accentColor']}" %>;
+		  color: <%= "##{cssSpec['menuShade']}" %>;
 		}
 
 			#menu .close:before, #menu .close:after {
@@ -3896,7 +3961,7 @@
 			}
 
 			#menu .close:after {
-				background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='20px' height='20px' viewBox='0 0 20 20' zoomAndPan='disable'%3E%3Cstyle%3Eline %7B stroke: %23<%= cssSpec['accentColor'] %>%3B stroke-width: 2%3B %7D%3C/style%3E%3Cline x1='0' y1='0' x2='20' y2='20' /%3E%3Cline x1='20' y1='0' x2='0' y2='20' /%3E%3C/svg%3E");
+				background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='20px' height='20px' viewBox='0 0 20 20' zoomAndPan='disable'%3E%3Cstyle%3Eline %7B stroke: %23<%= cssSpec['mainShade'] %>%3B stroke-width: 2%3B %7D%3C/style%3E%3Cline x1='0' y1='0' x2='20' y2='20' /%3E%3Cline x1='20' y1='0' x2='0' y2='20' /%3E%3C/svg%3E");
 				opacity: 0;
 			}
 
