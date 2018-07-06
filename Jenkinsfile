@@ -115,35 +115,35 @@ pipeline {
 //                slackSend channel: env.SLACK_ROOM, message: "Success: Functional test complete"
 //            }
 //        }
-        stage('Performance test with Gatling') {
-            agent {
-                docker {
-                    image 'denvazh/gatling'
-                    args "-u 0:0 --net demo"
-                }
-            }
-            steps {
-                script { STAGE = env.STAGE_NAME }
-                sh '''
-                   export APP_IP_ADDRESS=$(cat APP_IP_ADDRESS) && \\
-                   mv BasicSimulation.scala /opt/gatling/user-files/simulations/computerdatabase/BasicSimulation.scala && \
-                   gatling.sh -s computerdatabase.BasicSimulation
-                   '''
-                gatlingArchive()
-                slackSend channel: env.SLACK_ROOM, message: "Success: Performance test complete"
-            }
-        }
-        stage('Snyk Scan') {
-            agent {
-                docker {
-                    image 'maven:3.5.0'
-                }
-            }
-            steps {
-                script { STAGE = env.STAGE_NAME }
-                sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
-            }
-        }
+//        stage('Performance test with Gatling') {
+//            agent {
+//                docker {
+//                    image 'denvazh/gatling'
+//                    args "-u 0:0 --net demo"
+//                }
+//            }
+//            steps {
+//                script { STAGE = env.STAGE_NAME }
+//                sh '''
+//                   export APP_IP_ADDRESS=$(cat APP_IP_ADDRESS) && \\
+//                   mv BasicSimulation.scala /opt/gatling/user-files/simulations/computerdatabase/BasicSimulation.scala && \
+//                   gatling.sh -s computerdatabase.BasicSimulation
+//                   '''
+//                gatlingArchive()
+//                slackSend channel: env.SLACK_ROOM, message: "Success: Performance test complete"
+//            }
+//        }
+//        stage('Snyk Scan') {
+//            agent {
+//                docker {
+//                    image 'maven:3.5.0'
+//                }
+//            }
+//            steps {
+//                script { STAGE = env.STAGE_NAME }
+//                sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
+//            }
+//        }
         stage('Spin down container') {
             agent any
             steps {
@@ -171,7 +171,7 @@ pipeline {
                     PROMOTE_URL = "releases"
                 }
                 configFileProvider([configFile(fileId: 'artifactory', variable: 'MAVEN_SETTINGS')]) {
-                    sh "mvn -s $MAVEN_SETTINGS deploy:deploy-file -DgroupId=$GROUP_ID -DartifactId=$ARTIFACT_ID -Dversion=$VERSION -DrepositoryId=releases -Dfile=./target/${APP_NAME}.war -Durl=http://artifactory.liatr.io/artifactory/releases"
+                    sh "mvn -s $MAVEN_SETTINGS deploy:deploy-file -DgroupId=$GROUP_ID -DartifactId=$ARTIFACT_ID -Dversion=$VERSION -DrepositoryId=releases -Dfile=./target/personal-banking.war -Durl=http://artifactory.liatr.io/artifactory/releases"
                 }
             }
         }
