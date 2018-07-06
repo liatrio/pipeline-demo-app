@@ -175,16 +175,22 @@ pipeline {
                 }
             }
         }
-        stage("Provisioning Dev Environment") {
+        stage("Provisioning Test Environment") {
             agent any
+            when { not { branch 'master' } }
             steps {
                 script {
                     STAGE = env.STAGE_NAME
                     DEV_IP = "${env.BRANCH_NAME}.${APP_NAME}.liatr.io"
                 }
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
-                    slackSend channel: env.SLACK_ROOM, message: "Provisioning dev environment"
-                    sh "export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_instance_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME} && ./terraform.sh"
+                    slackSend channel: env.SLACK_ROOM, message: "Provisioning test environment"
+                    sh """export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_branch_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME}
+                      terraform init -input=false -no-color -reconfigure -backend-config='key=liatristorage/${PROJECT_NAME}/${env.BRANCH_NAME}-terraform.tfstate'
+                      terraform workspace select ${env.APP_NAME}_${env.BRANCH_NAME} -no-color || terraform workspace new ${env.APP_NAME}_${env.BRANCH_NAME} -no-color
+                      terraform plan -out=plan_${env.APP_NAME}_${env.BRANCH_NAME} -input=false -no-color
+                      terraform apply -input=false plan_${env.APP_NAME} -no-color
+                      """
                 }
             }
         }
@@ -256,7 +262,11 @@ pipeline {
             steps {
                 script { STAGE = env.STAGE_NAME }
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
-                    sh "export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_instance_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME} && ./destroy.sh"
+                    sh """export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_branch_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME}
+                      terraform init -input=false -no-color -reconfigure -backend-config='key=liatristorage/${PROJECT_NAME}/${env.BRANCH_NAME}-terraform.tfstate'
+                      terraform workspace select ${env.APP_NAME}_${env.BRANCH_NAME} -no-color
+                      terraform destroy -force -no-color
+                      """
                     slackSend channel: env.SLACK_ROOM, message: "Deleted feature branch environment"
                 }
             }

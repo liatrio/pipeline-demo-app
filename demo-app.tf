@@ -19,7 +19,7 @@ variable "tag" {
     default = "1.2.0-SNAPSHOT"
 }
 
-variable "instance_name" {
+variable "branch_name" {
     description = "Name of branch that is being deployed"
 }
 
@@ -37,19 +37,19 @@ data "terraform_remote_state" "network" {
     backend = "s3"
     config {
         bucket = "liatristorage"
-        key = "liatristorage/${terraform.workspace}/${var.instance_name}-terraform.tfstate"
+        key = "liatristorage/${terraform.workspace}/${var.branch_name}-terraform.tfstate"
         region = "us-west-2"
     }
 }
 
-resource "aws_instance" "personal-banking-env" {
+resource "aws_instance" "demo-app-env" {
     instance_type           = "t2.micro"
     key_name                = "jenkins.liatr.io"
     ami                     = "${var.ami_id}"
     security_groups         = ["web", "https server"]
 
     tags = {
-      Name = "${var.instance_name}"
+      Name = "${var.branch_name}"
     }
 
 
@@ -75,10 +75,10 @@ data "aws_route53_zone" "liatrio" {
   name = "liatr.io"
 }
 
-resource "aws_route53_record" "personal-banking-env" {
+resource "aws_route53_record" "demo-app-dns" {
   zone_id = "${data.aws_route53_zone.liatrio.zone_id}"
-  name    = "${var.instance_name}.${var.app_name}.liatr.io"
+  name    = "${var.branch_name}.${var.app_name}.liatr.io"
   type    = "A"
   ttl     = "300"
-  records = ["${aws_instance.personal-banking-env.public_ip}"]
+  records = ["${aws_instance.demo-app-env.public_ip}"]
 }
