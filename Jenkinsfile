@@ -25,7 +25,8 @@ pipeline {
         SLACK_ROOM = "${APP_NAME}"
     }
     stages {
-        stage('Build') {
+        stage('Maven: Build and push artifact to Artifactory') {
+            // also runs jacoco
             agent {
                 docker {
                     image 'maven:3.5.0'
@@ -35,19 +36,19 @@ pipeline {
                 script {
                     STAGE = env.STAGE_NAME
                     JIRA_ISSUE = getJiraIssue()
-                    echo "jira issue ${JIRA_ISSUE}"
-                    def gitUrl = env.GIT_URL ? env.GIT_URL: env.GIT_URL_1
+                    echo "Jira issue: ${JIRA_ISSUE}"
+                    def gitUrl = env.GIT_URL ? env.GIT_URL : env.GIT_URL_1
                     slackSend channel: env.SLACK_ROOM, message: "Triggered build of ${env.GIT_BRANCH} from <${BITBUCKET_URL}/commits/${env.GIT_COMMIT}|commit>. Follow progress <${RUN_DISPLAY_URL}|here>"
                     withCredentials([usernamePassword(credentialsId: 'Artifactory', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "mvn clean deploy -B -DartifactoryUsername=$USERNAME -DartifactoryPassword=$PASSWORD"
                     }
                     junit 'target/surefire-reports/*.xml'
                     jacoco()
-                    slackSend channel: env.SLACK_ROOM, message: "Success: Build complete"
+                    slackSend channel: env.SLACK_ROOM, message: "Maven build complete"
                 }
             }
         }
-        stage('Analyze Code with Sonar') {
+        stage('Maven: Analyze code with Sonar') {
             agent {
                 docker {
                     image 'maven:3.5.0'
@@ -60,11 +61,11 @@ pipeline {
                         sh "mvn sonar:sonar -Dsonar.login=${sonarqubeToken}"
                     }
                     pom = readMavenPom file: 'pom.xml'
-                    slackSend channel: env.SLACK_ROOM, message: "Success: Sonarqube scan complete - <${env.SONAR_URL}/dashboard?id=${pom.groupId}%3A${pom.artifactId}|view project>"
+                    slackSend channel: env.SLACK_ROOM, message: "Sonarqube scan complete - <${env.SONAR_URL}/dashboard?id=${pom.groupId}%3A${pom.artifactId}|view project>"
                 }
             }
         }
-        stage('Build container') {
+        stage('Build Docker image') {
             agent any
             steps {
                 script {
@@ -72,10 +73,11 @@ pipeline {
                     pom = readMavenPom file: 'pom.xml'
                     TAG = pom.version
                     sh "docker build -t ${env.DOCKER_REPO}/${env.IMAGE}:${TAG} ."
+                    slackSend channel: env.SLACK_ROOM, message: "Docker image build complete"
                 }
             }
         }
-        stage('Push to Artifactory') {
+        stage('Push docker image to Artifactory') {
             agent any
             steps {
                 script {
@@ -84,11 +86,11 @@ pipeline {
                         sh "docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${DOCKER_REPO}"
                         sh "docker push ${env.DOCKER_REPO}/${env.IMAGE}:${TAG}"
                     }
-                    slackSend channel: env.SLACK_ROOM, message: "Success: Container pushed to <${env.ARTIFACTORY_URL}/artifactory/webapp/#/artifacts/browse/tree/General/docker-local/${env.IMAGE}/${TAG}|artifactory>"
+                    slackSend channel: env.SLACK_ROOM, message: "Docker image pushed to <${env.ARTIFACTORY_URL}/artifactory/webapp/#/artifacts/browse/tree/General/docker-local/${env.IMAGE}/${TAG}|artifactory>"
                 }
             }
         }
-        stage('Run container') {
+        stage('Spin up local container for automated testing') {
             agent any
             steps {
                 sh "docker network create demo || true"
@@ -115,36 +117,37 @@ pipeline {
 //                slackSend channel: env.SLACK_ROOM, message: "Success: Functional test complete"
 //            }
 //        }
-//        stage('Performance test with Gatling') {
-//            agent {
-//                docker {
-//                    image 'denvazh/gatling'
-//                    args "-u 0:0 --net demo"
-//                }
-//            }
-//            steps {
-//                script { STAGE = env.STAGE_NAME }
-//                sh '''
-//                   export APP_IP_ADDRESS=$(cat APP_IP_ADDRESS) && \\
-//                   mv BasicSimulation.scala /opt/gatling/user-files/simulations/computerdatabase/BasicSimulation.scala && \
-//                   gatling.sh -s computerdatabase.BasicSimulation
-//                   '''
-//                gatlingArchive()
-//                slackSend channel: env.SLACK_ROOM, message: "Success: Performance test complete"
-//            }
-//        }
-//        stage('Snyk Scan') {
-//            agent {
-//                docker {
-//                    image 'maven:3.5.0'
-//                }
-//            }
-//            steps {
-//                script { STAGE = env.STAGE_NAME }
-//                sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
-//            }
-//        }
-        stage('Spin down container') {
+        stage('Gatling performance test') {
+            agent {
+                docker {
+                    image 'denvazh/gatling'
+                    args "-u 0:0 --net demo"
+                }
+            }
+            steps {
+                script { STAGE = env.STAGE_NAME }
+                sh '''
+                   export APP_IP_ADDRESS=$(cat APP_IP_ADDRESS) && \\
+                   mv BasicSimulation.scala /opt/gatling/user-files/simulations/computerdatabase/BasicSimulation.scala && \
+                   gatling.sh -s computerdatabase.BasicSimulation
+                   '''
+                gatlingArchive()
+                slackSend channel: env.SLACK_ROOM, message: "Gatling performance test complete"
+            }
+        }
+        stage('Snyk Scan') {
+            agent {
+                docker {
+                    image 'maven:3.5.0'
+                }
+            }
+            steps {
+                script { STAGE = env.STAGE_NAME }
+                sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
+                slackSend channel: env.SLACK_ROOM, message: "Snyk test complete"
+            }
+        }
+        stage('Spin down container used for testing') {
             agent any
             steps {
                 script {
@@ -152,9 +155,10 @@ pipeline {
                 }
                 sh "docker stop ${APP_NAME} || true"
                 sh 'docker network rm demo || true'
+                slackSend channel: env.SLACK_ROOM, message: "Tests concluded - container spun down"
             }
         }
-        stage('Promote Artifact') {
+        stage('Maven: Promote artifact from snapshot to release in Artifactory') {
             agent {
                 docker {
                     image 'maven:3.5.0'
@@ -173,9 +177,10 @@ pipeline {
                 configFileProvider([configFile(fileId: 'artifactory', variable: 'MAVEN_SETTINGS')]) {
                     sh "mvn -s $MAVEN_SETTINGS deploy:deploy-file -DgroupId=$GROUP_ID -DartifactId=$ARTIFACT_ID -Dversion=$VERSION -DrepositoryId=releases -Dfile=./target/personal-banking.war -Durl=http://artifactory.liatr.io/artifactory/releases"
                 }
+                slackSend channel: env.SLACK_ROOM, message: "Artifact promoted from SNAPSHOT to RELEASE"
             }
         }
-        stage("Provisioning Test Environment") {
+        stage("Provisioning test environment") {
             agent any
             when { not { branch 'master' } }
             steps {
@@ -192,9 +197,11 @@ pipeline {
                       terraform apply -input=false plan_${env.APP_NAME} -no-color
                       """
                 }
+                slackSend channel: env.SLACK_ROOM, message: "Environment provisioned for testing <http://${DEV_IP}|here>"
+
             }
         }
-        stage("Deploying to Environment") {
+        stage("Deploying to test environment") {
             agent any
             steps {
                 script { STAGE = env.STAGE_NAME }
@@ -217,7 +224,7 @@ pipeline {
                         echo "No Jira Ticket"
                     }
                 }
-                slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: Deployed to http://${DEV_IP}/${APP_NAME} - waiting on Smoke Test"
+                slackSend channel: env.SLACK_ROOM, color: 'good', message: "Application deployed to http://${DEV_IP}/${APP_NAME} - waiting on Smoke Test"
             }
         }
 //        stage('Selenium smoke test') {
@@ -239,7 +246,7 @@ pipeline {
 //                }
 //            }
 //        }
-        stage("Ready to destroy ephemeral environment?") {
+        stage("Waiting for manual test environment validation") {
             agent any
             when { not { branch 'master' } }
             steps {
@@ -254,9 +261,10 @@ pipeline {
                         echo "Instance timeout reached, destroying..."
                     }
                 }
+                slackSend channel: env.SLACK_ROOM, message: "Waiting period finished"
             }
         }
-        stage("Destroying ephemeral environment") {
+        stage("Destroying test environment") {
             agent any
             when { not { branch 'master' } }
             steps {
@@ -267,7 +275,7 @@ pipeline {
                       terraform workspace select ${env.APP_NAME}_${env.BRANCH_NAME} -no-color
                       terraform destroy -force -no-color
                       """
-                    slackSend channel: env.SLACK_ROOM, message: "Deleted feature branch environment"
+                    slackSend channel: env.SLACK_ROOM, message: "Destroyed testing environment"
                 }
             }
         }
