@@ -63,7 +63,11 @@ public class ContactForm {
 
 	@When("^I press \"(.*?)\"$")
 	public void i_press(String arg1) throws Throwable {
-		WebElement button = driver.findElementById("contactButton");
+
+    String valueSearchString;
+    valueSearchString = String.format("//input[@value=\"" + arg1 + "\"]");
+
+		WebElement button = driver.findElement(By.xpath(valueSearchString));
     button.click();
     Thread.sleep(2000);
 	}

@@ -9,14 +9,14 @@ Feature: Contact form
   Scenario: Filling out one field
     Given I am on a page with the contact form
     When I fill in "name" with "test"
-    When I press "submit"
+    When I press "Send Message"
     Then I should not see thank you message
 
   Scenario: Filling out two fields
     Given I am on a page with the contact form
     When I fill in "name" with "test"
     When I fill in "email" with "test@test.com"
-    When I press "submit"
+    When I press "Send Message"
     Then I should not see thank you message
 
   Scenario: Filling out all fields

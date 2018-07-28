@@ -102,21 +102,21 @@ pipeline {
                 sh "echo \$(docker inspect --format='{{ .NetworkSettings.Networks.demo.IPAddress }}' \$(docker ps -q --filter name=${APP_NAME})) > APP_IP_ADDRESS"
             }
         }
-//        stage('Functional test With Selenium') {
-//            agent {
-//                docker {
-//                    image 'maven:3.5.0'
-//                    args '--net demo'
-//                }
-//            }
-//            steps {
-//                script { STAGE = env.STAGE_NAME }
-//                sh "cd regression-suite && \
-//                mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
-//                cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
-//                slackSend channel: env.SLACK_ROOM, message: "Selenium test complete"
-//            }
-//        }
+        stage('Functional test With Selenium') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--net demo'
+                 }
+             }
+             steps {
+                 script { STAGE = env.STAGE_NAME }
+                 sh "cd regression-suite && \
+                 mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
+                 cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
+                 slackSend channel: env.SLACK_ROOM, message: "Selenium test complete"
+             }
+        }
         stage('Gatling performance test') {
             agent {
                 docker {
@@ -227,27 +227,27 @@ pipeline {
                 slackSend channel: env.SLACK_ROOM, color: 'good', message: "Application deployed to http://${DEV_IP}/${APP_NAME} - waiting on Smoke Test"
             }
         }
-//        stage('Selenium smoke test') {
-//            agent {
-//                docker {
-//                    image 'maven:3.5.0'
-//                }
-//            }
-//            steps {
-//                script {
-//                    STAGE = env.STAGE_NAME
-//                    sh "cd regression-suite && \
-//                    mvn clean -B test -DPETCLINIC_URL=http://${DEV_IP}/${APP_NAME}/ -Dcucumber.options='--tags @smoke'"
-//                    slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: smoke-test completed."
-//                    if (env.GIT_BRANCH =~ /(PR-[0-9]+)/)
-//                        slackSend channel: env.SLACK_ROOM, color: 'good', message: "PR is <${BITBUCKET_URL}/pull-requests|ready to merge>"
-//                    else if (env.GIT_BRANCH != 'master')
-//                        slackSend channel: env.SLACK_ROOM, color: 'good', message: "Ready to <${BITBUCKET_URL}/pull-requests?create&targetBranch=refs%2Fheads%2Fmaster&sourceBranch=refs%2Fheads%2F${env.GIT_BRANCH}|create a PR>?"
-//                }
-//                slackSend channel: env.SLACK_ROOM, message: "Selenium tests complete"
-//            }
-//        }
-        stage("Waiting for manual test environment validation") {
+        stage('Selenium smoke test') {
+           agent {
+               docker {
+                   image 'maven:3.5.0'
+               }
+           }
+           steps {
+               script {
+                   STAGE = env.STAGE_NAME
+                   sh "cd regression-suite && \
+                   mvn clean -B test -DPETCLINIC_URL=http://${DEV_IP}/${APP_NAME}/ -Dcucumber.options='--tags @smoke'"
+                   slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: smoke-test completed."
+                   if (env.GIT_BRANCH =~ /(PR-[0-9]+)/)
+                       slackSend channel: env.SLACK_ROOM, color: 'good', message: "PR is <${BITBUCKET_URL}/pull-requests|ready to merge>"
+                   else if (env.GIT_BRANCH != 'master')
+                       slackSend channel: env.SLACK_ROOM, color: 'good', message: "Ready to <${BITBUCKET_URL}/pull-requests?create&targetBranch=refs%2Fheads%2Fmaster&sourceBranch=refs%2Fheads%2F${env.GIT_BRANCH}|create a PR>?"
+               }
+               slackSend channel: env.SLACK_ROOM, message: "Selenium tests complete"
+           }
+         }
+         stage("Waiting for manual test environment validation") {
             agent any
             when { not { branch 'master' } }
             steps {
