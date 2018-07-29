@@ -218,13 +218,13 @@ pipeline {
                 }
                 script {
                     try {
-                        jiraComment body: "Deployed ${env.IMAGE}:${TAG} to http://${DEV_IP}/${APP_NAME}", issueKey: "${JIRA_ISSUE}"
+                        jiraComment body: "Deployed ${env.IMAGE}:${TAG} to http://${DEV_IP}/personal-banking", issueKey: "${JIRA_ISSUE}"
                     }
                     catch (e) {
                         echo "No Jira Ticket"
                     }
                 }
-                slackSend channel: env.SLACK_ROOM, color: 'good', message: "Application deployed to http://${DEV_IP}/${APP_NAME} - waiting on Smoke Test"
+                slackSend channel: env.SLACK_ROOM, color: 'good', message: "Application deployed to http://${DEV_IP}/personal-banking - waiting on Smoke Test"
             }
         }
 //        stage('Selenium smoke test') {
