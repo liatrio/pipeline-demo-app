@@ -110,6 +110,9 @@ pipeline {
                      args '--net demo'
                  }
              }
+             environment {
+               CONTAINER_HTTP_URL = "http://${DEV_IP}"
+            }
              steps {
                  script { STAGE = env.STAGE_NAME }
                  sh "cd regression-suite && \
@@ -233,6 +236,9 @@ pipeline {
                docker {
                    image 'maven:3.5.0'
                }
+           }
+           environment {
+               CONTAINER_HTTP_URL = "http://${DEV_IP}"
            }
            steps {
                script {

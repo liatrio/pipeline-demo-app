@@ -35,7 +35,7 @@ public class Configure {
         }
 
         // get the property value and print it out
-        String envPetclinicUrl = System.getProperty("PETCLINIC_URL");
+        String envPetclinicUrl = System.getenv("CONTAINER_HTTP_URL") + "/personal-banking";
         if (envPetclinicUrl == null)
         {
             envPetclinicUrl = prop.getProperty("spring.petclinic.url");
