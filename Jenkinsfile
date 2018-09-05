@@ -110,12 +110,12 @@ pipeline {
                  }
              }
              environment {
-               CONTAINER_HTTP_URL = "http://${DEV_IP}"
+               CONTAINER_HTTP_URL = "http://${APP_NAME}:8080"
             }
              steps {
                  script { STAGE = env.STAGE_NAME }
                  sh "cd regression-suite && \
-                 mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
+                 mvn clean -B test -Dcucumber.options='--tags ~@smoke'"
                  cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
                  slackSend channel: env.SLACK_ROOM, message: "Selenium test complete"
              }
