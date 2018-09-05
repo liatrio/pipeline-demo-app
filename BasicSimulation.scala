@@ -21,7 +21,7 @@ import scala.concurrent.duration._
 
 class BasicSimulation extends Simulation {
 
-  val IPAddress = sys.env("APP_IP_ADDRESS")
+  val IPAddress = sys.env("APP_NAME")
 
   val httpConf = http
     .baseURL("http://" + IPAddress + ":8080/personal-banking")

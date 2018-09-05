@@ -100,7 +100,6 @@ pipeline {
                     runAppLocally(appName: "${APP_NAME}", imageName: "${env.IMAGE}", imageVersion: "${TAG}")
                     slackSend channel: env.SLACK_ROOM, message: "Running container locally for further testing"
                 }
-                sh "echo \$(docker inspect --format='{{ .NetworkSettings.Networks.demo.IPAddress }}' \$(docker ps -q --filter name=${APP_NAME})) > APP_IP_ADDRESS"
             }
         }
         stage('Functional test With Selenium') {
@@ -111,12 +110,12 @@ pipeline {
                  }
              }
              environment {
-               CONTAINER_HTTP_URL = "http://${DEV_IP}"
+               CONTAINER_HTTP_URL = "http://${APP_NAME}:8080"
             }
              steps {
                  script { STAGE = env.STAGE_NAME }
                  sh "cd regression-suite && \
-                 mvn clean -B test -DPETCLINIC_URL=http://${APP_NAME}:8080/${APP_NAME} -Dcucumber.options='--tags ~@smoke'"
+                 mvn clean -B test -Dcucumber.options='--tags ~@smoke'"
                  cucumber fileIncludePattern: 'regression-suite/**/*.json', sortingMethod: 'ALPHABETICAL'
                  slackSend channel: env.SLACK_ROOM, message: "Selenium test complete"
              }
@@ -131,24 +130,11 @@ pipeline {
             steps {
                 script { STAGE = env.STAGE_NAME }
                 sh '''
-                   export APP_IP_ADDRESS=$(cat APP_IP_ADDRESS) && \\
                    mv BasicSimulation.scala /opt/gatling/user-files/simulations/computerdatabase/BasicSimulation.scala && \
                    gatling.sh -s computerdatabase.BasicSimulation
                    '''
                 gatlingArchive()
                 slackSend channel: env.SLACK_ROOM, message: "Gatling performance test complete"
-            }
-        }
-        stage('Snyk Scan') {
-            agent {
-                docker {
-                    image 'maven:3.5.0'
-                }
-            }
-            steps {
-                script { STAGE = env.STAGE_NAME }
-                sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
-                slackSend channel: env.SLACK_ROOM, message: "Snyk test complete"
             }
         }
         stage('Spin down container used for testing') {
