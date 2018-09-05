@@ -137,18 +137,6 @@ pipeline {
                 slackSend channel: env.SLACK_ROOM, message: "Gatling performance test complete"
             }
         }
-        stage('Snyk Scan') {
-            agent {
-                docker {
-                    image 'maven:3.5.0'
-                }
-            }
-            steps {
-                script { STAGE = env.STAGE_NAME }
-                sh "mvn snyk:test -DSNYK_API_TOKEN=${SNYK_TOKEN}"
-                slackSend channel: env.SLACK_ROOM, message: "Snyk test complete"
-            }
-        }
         stage('Spin down container used for testing') {
             agent any
             steps {
