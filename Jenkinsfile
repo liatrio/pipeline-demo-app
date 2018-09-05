@@ -100,7 +100,6 @@ pipeline {
                     runAppLocally(appName: "${APP_NAME}", imageName: "${env.IMAGE}", imageVersion: "${TAG}")
                     slackSend channel: env.SLACK_ROOM, message: "Running container locally for further testing"
                 }
-                sh "echo \$(docker inspect --format='{{ .NetworkSettings.Networks.demo.IPAddress }}' \$(docker ps -q --filter name=${APP_NAME})) > APP_IP_ADDRESS"
             }
         }
         stage('Functional test With Selenium') {
@@ -131,7 +130,6 @@ pipeline {
             steps {
                 script { STAGE = env.STAGE_NAME }
                 sh '''
-                   export APP_IP_ADDRESS=$(cat APP_IP_ADDRESS) && \\
                    mv BasicSimulation.scala /opt/gatling/user-files/simulations/computerdatabase/BasicSimulation.scala && \
                    gatling.sh -s computerdatabase.BasicSimulation
                    '''
