@@ -13,7 +13,7 @@ pipeline {
         JIRA_ISSUE = ''
         JIRA_URL = 'http://jira.liatr.io'
         ARTIFACTORY_URL = 'https://artifactory.liatr.io'
-        BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_KEY}/repos/${APP_NAME}"
+        BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_KEY}/repos/pipeline-demo-application"
         DOCKER_REPO = "docker.artifactory.liatr.io"
         AWS_ACCESS_KEY_ID = credentials('AWSaccess')
         AWS_SECRET_ACCESS_KEY = credentials('AWSsecret')
