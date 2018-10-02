@@ -1,7 +1,7 @@
 #!/bin/env groovy
 library 'pipeline-library'
 pipeline {
-    agent none
+    agent any
     environment {
         APP_NAME = "__APP_NAME__"
         PROJECT_KEY = "__PROJECT_KEY__"
@@ -27,10 +27,10 @@ pipeline {
     }
     stages {
         stage('Maven: Build and push artifact to Artifactory') {
-            // also runs jacoco
             agent {
                 docker {
                     image 'maven:3.5.0'
+                    reuseNode true
                 }
             }
             steps {
@@ -53,6 +53,7 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3.5.0'
+                    reuseNode true
                 }
             }
             steps {
@@ -67,7 +68,6 @@ pipeline {
             }
         }
         stage('Build Docker image') {
-            agent any
             steps {
                 script {
                     STAGE = env.STAGE_NAME
@@ -79,7 +79,6 @@ pipeline {
             }
         }
         stage('Push docker image to Artifactory') {
-            agent any
             steps {
                 script {
                     STAGE = env.STAGE_NAME
@@ -92,7 +91,6 @@ pipeline {
             }
         }
         stage('Spin up local container for automated testing') {
-            agent any
             steps {
                 sh "docker network create demo || true"
                 script {
@@ -107,6 +105,7 @@ pipeline {
                  docker {
                      image 'maven:3.5.0'
                      args '--net demo'
+                     reuseNode true
                  }
              }
              environment {
@@ -125,6 +124,7 @@ pipeline {
                 docker {
                     image 'denvazh/gatling'
                     args "-u 0:0 --net demo"
+                    reuseNode true
                 }
             }
             steps {
@@ -138,7 +138,6 @@ pipeline {
             }
         }
         stage('Spin down container used for testing') {
-            agent any
             steps {
                 script {
                     STAGE = env.STAGE_NAME
@@ -152,6 +151,7 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3.5.0'
+                    reuseNode true
                 }
             }
             when { branch 'master' }
@@ -171,7 +171,6 @@ pipeline {
             }
         }
         stage("Provisioning test environment") {
-            agent any
             when { not { branch 'master' } }
             steps {
                 script {
@@ -192,7 +191,6 @@ pipeline {
             }
         }
         stage("Deploying to test environment") {
-            agent any
             steps {
                 script { STAGE = env.STAGE_NAME }
                 withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
@@ -221,6 +219,7 @@ pipeline {
            agent {
                docker {
                    image 'maven:3.5.0'
+                   reuseNode true
                }
            }
            environment {
@@ -241,7 +240,6 @@ pipeline {
            }
          }
          stage("Waiting for manual test environment validation") {
-            agent any
             when { not { branch 'master' } }
             steps {
                 script {
@@ -259,7 +257,6 @@ pipeline {
             }
         }
         stage("Destroying test environment") {
-            agent any
             when { not { branch 'master' } }
             steps {
                 script { STAGE = env.STAGE_NAME }
