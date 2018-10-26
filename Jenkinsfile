@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sleep 5
                   slackMessage([
-                    event: "buld-complete",
+                    event: "build-start",
                     channel: "${env.SLACK_ROOM}",
                     slackURL: "${env.SLACK_WEBHOOK_URL}",
                     message: "Maven build complete"
