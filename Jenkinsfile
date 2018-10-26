@@ -3,7 +3,7 @@ library 'pipeline-library@rich-slack'
 pipeline {
     agent any
     environment {
-        SLACK_ROOM = "pipeline-pal"
+        SLACK_ROOM = "jeff"
         SLACK_WEBHOOK_URL = credentials("jeff-slack-webhook")
     }
     stages {
