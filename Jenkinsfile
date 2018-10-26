@@ -4,6 +4,7 @@ pipeline {
     agent any
     environment {
         SLACK_ROOM = "pipeline-pal"
+        SLACK_WEBHOOK_URL = credentials("jeff-slack-webhook")
     }
     stages {
         stage('Maven: Build and push artifact to Artifactory') {
@@ -12,6 +13,7 @@ pipeline {
                   slackMessage([
                     event: "buld-complete",
                     channel: "${env.SLACK_ROOM}",
+                    slackURL: "${env.SLACK_WEBHOOK_URL}",
                     message: "Maven build complete"
                   ])
             }
