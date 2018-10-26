@@ -3,22 +3,21 @@ library 'pipeline-library@rich-slack'
 pipeline {
     agent any
     environment {
-        SLACK_ROOM = "jeff"
+        SLACK_ROOM = "pipeline-pal"
     }
     stages {
         stage('Maven: Build and push artifact to Artifactory') {
-            agent any
             steps {
                 sleep 5
                   slackMessage([
                     event: "buld-complete",
-                    channel: env.SLACK_ROOM,
+                    channel: "${env.SLACK_ROOM}",
                     message: "Maven build complete"
                   ])
             }
         }
         stage('Maven: Analyze code with Sonar') {
-            agent any
+
             steps {
                 sleep 5
             }
@@ -39,13 +38,13 @@ pipeline {
             }
         }
         stage('Functional test With Selenium') {
-             agent any
+ 
              steps {
                  sleep 5
              }
         }
         stage('Gatling performance test') {
-            agent any
+
             steps {
                 sleep 5
             }
@@ -56,7 +55,7 @@ pipeline {
             }
         }
         stage('Maven: Promote artifact from snapshot to release in Artifactory') {
-            agent any
+
             steps {
                 sleep 5
             }
@@ -72,7 +71,6 @@ pipeline {
             }
         }
         stage('Selenium smoke test') {
-           agent any
            steps {
                sleep 5
            }
