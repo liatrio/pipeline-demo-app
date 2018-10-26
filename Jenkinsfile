@@ -3,26 +3,6 @@ library 'pipeline-library@rich-slack'
 pipeline {
     agent any
     environment {
-        APP_NAME = "__APP_NAME__"
-        PROJECT_KEY = "__PROJECT_KEY__"
-        DEMO_APP_PATH = "personal-banking"
-        IMAGE = "${APP_NAME}-demo"
-        DEV_IP = "dev.${APP_NAME}.liatr.io"
-        SONAR_URL = 'http://sonarqube.liatr.io'
-        TAG = ''
-        JIRA_ISSUE = ''
-        JIRA_URL = 'http://jira.liatr.io'
-        ARTIFACTORY_URL = 'https://artifactory.liatr.io'
-        BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_KEY}/repos/pipeline-demo-application"
-        DOCKER_REPO = "docker.artifactory.liatr.io"
-        AWS_ACCESS_KEY_ID = credentials('AWSaccess')
-        AWS_SECRET_ACCESS_KEY = credentials('AWSsecret')
-        SNYK_TOKEN = credentials('snyk')
-        AWS_DEFAULT_REGION = 'us-west-2'
-        GROUP_ID = ''
-        ARTIFACT_ID = ''
-        VERSION = ''
-        STAGE = ''
         SLACK_ROOM = "jeff"
     }
     stages {
