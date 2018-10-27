@@ -5,19 +5,22 @@ pipeline {
     environment {
         SLACK_ROOM = "jeff"
         SLACK_WEBHOOK_URL = credentials("jeff-slack-webhook")
+        SLACK_TOKEN = credentials("pipeline-pal-slack")
     }
     stages {
         stage('Maven: Build and push artifact to Artifactory') {
             steps {
                 slackMessage([
                   event: "build-start",
+                  token:  "${env.SLACK_TOKEN}",
                   channel: "${env.SLACK_ROOM}",
                   slackURL: "${env.SLACK_WEBHOOK_URL}",
-                  message: "Maven build start"
+                  message: "Maven: Build and push artifact to Artifactory"
                 ])
                 sleep 5
                 slackMessage([
                   event: "build-complete",
+                  token: credentials("pipeline-pal-slack-token"),
                   channel: "${env.SLACK_ROOM}",
                   slackURL: "${env.SLACK_WEBHOOK_URL}",
                   message: "Maven build complete"
