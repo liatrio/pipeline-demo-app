@@ -11,38 +11,36 @@ pipeline {
         stage('Maven: Build and push artifact to Artifactory') {
             steps {
               script {
-                messages = slackMessage([
-                    event: "build-start",
+                messages = sendSlackPipeline([
                     token:  "${env.SLACK_TOKEN}",
                     channel: "${env.SLACK_ROOM}",
-                    slackURL: "${env.SLACK_WEBHOOK_URL}",
-                    message: "Maven: Build and push artifact to Artifactory"
+                    slackURL: "${env.SLACK_WEBHOOK_URL}"
                   ])
               }
                 /************************************************************/
                 sleep 10
                 /******** ****************************************************/
-                slackMessage([
-                  event: "build-complete",
-                  token: "${env.SLACK_TOKEN}",
-                  messages: messages,
-                  channel: "${env.SLACK_ROOM}",
-                  slackURL: "${env.SLACK_WEBHOOK_URL}",
-                  message: "Maven build complete"
-                ])
+                //updateMessage([
+                //  event: "build-complete",
+                //  token: "${env.SLACK_TOKEN}",
+                //  messages: messages,
+                //  channel: "${env.SLACK_ROOM}",
+                //  slackURL: "${env.SLACK_WEBHOOK_URL}",
+                //  message: "Maven build complete"
+                //])
             }
         }
         stage('Maven: Analyze code with Sonar') {
 
             steps {
-                slackMessage([
-                  event: "sonar-start",
-                  token: "${env.SLACK_TOKEN}",
-                  messages: messages,
-                  channel: "${env.SLACK_ROOM}",
-                  slackURL: "${env.SLACK_WEBHOOK_URL}",
-                  message: "running sonar analysis"
-                ])
+                //updateMessage([
+                //  event: "sonar-start",
+                //  token: "${env.SLACK_TOKEN}",
+                //  messages: messages,
+                //  channel: "${env.SLACK_ROOM}",
+                //  slackURL: "${env.SLACK_WEBHOOK_URL}",
+                //  message: "running sonar analysis"
+                //])
                 sleep 10
             }
         }
