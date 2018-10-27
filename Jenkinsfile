@@ -35,6 +35,14 @@ pipeline {
         stage('Maven: Analyze code with Sonar') {
 
             steps {
+                slackMessage([
+                  event: "sonar-start",
+                  token: "${env.SLACK_TOKEN}",
+                  messages: messages,
+                  channel: "${env.SLACK_ROOM}",
+                  slackURL: "${env.SLACK_WEBHOOK_URL}",
+                  message: "running sonar analysis"
+                ])
                 sleep 10
             }
         }
