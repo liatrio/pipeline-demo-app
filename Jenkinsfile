@@ -21,10 +21,11 @@ pipeline {
               }
                 /************************************************************/
                 sleep 5
-                /************************************************************/
+                /******** ****************************************************/
+                echo messages[0].ts
                 slackMessage([
                   event: "build-complete",
-                  token: credentials("pipeline-pal-slack-token"),
+                  token: "${env.SLACK_TOKEN}",
                   messages: messages,
                   channel: "${env.SLACK_ROOM}",
                   slackURL: "${env.SLACK_WEBHOOK_URL}",
