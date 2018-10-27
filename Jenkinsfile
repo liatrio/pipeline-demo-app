@@ -20,9 +20,8 @@ pipeline {
                   ])
               }
                 /************************************************************/
-                sleep 5
+                sleep 10
                 /******** ****************************************************/
-                echo messages[0].ts
                 slackMessage([
                   event: "build-complete",
                   token: "${env.SLACK_TOKEN}",
@@ -36,70 +35,70 @@ pipeline {
         stage('Maven: Analyze code with Sonar') {
 
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Build Docker image') {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Push docker image to Artifactory') {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Spin up local container for automated testing') {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Functional test With Selenium') {
  
              steps {
-                 sleep 5
+                 sleep 10
              }
         }
         stage('Gatling performance test') {
 
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Spin down container used for testing') {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Maven: Promote artifact from snapshot to release in Artifactory') {
 
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage("Provisioning test environment") {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage("Deploying to test environment") {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage('Selenium smoke test') {
            steps {
-               sleep 5
+               sleep 10
            }
          }
          stage("Waiting for manual test environment validation") {
             steps {
-                sleep 5
+                sleep 10
             }
         }
         stage("Destroying test environment") {
             steps {
-                sleep 5
+                sleep 10
             }
         }
     }
