@@ -11,100 +11,133 @@ pipeline {
         stage('Maven: Build and push artifact to Artifactory') {
             steps {
               script {
-                messages = sendSlackPipeline([
-                    token:  "${env.SLACK_TOKEN}",
-                    channel: "${env.SLACK_ROOM}",
-                    slackURL: "${env.SLACK_WEBHOOK_URL}"
-                  ])
+                messages = sendSlackPipeline()
               }
-                /************************************************************/
-                sleep 10
-                /******** ****************************************************/
-                //updateMessage([
-                //  event: "build-complete",
-                //  token: "${env.SLACK_TOKEN}",
-                //  messages: messages,
-                //  channel: "${env.SLACK_ROOM}",
-                //  slackURL: "${env.SLACK_WEBHOOK_URL}",
-                //  message: "Maven build complete"
-                //])
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /******** ****************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Maven: Analyze code with Sonar') {
-
             steps {
-                //updateMessage([
-                //  event: "sonar-start",
-                //  token: "${env.SLACK_TOKEN}",
-                //  messages: messages,
-                //  channel: "${env.SLACK_ROOM}",
-                //  slackURL: "${env.SLACK_WEBHOOK_URL}",
-                //  message: "running sonar analysis"
-                //])
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Build Docker image') {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Push docker image to Artifactory') {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Spin up local container for automated testing') {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Functional test With Selenium') {
  
              steps {
-                 sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+               sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
              }
         }
         stage('Gatling performance test') {
 
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Spin down container used for testing') {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Maven: Promote artifact from snapshot to release in Artifactory') {
 
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage("Provisioning test environment") {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage("Deploying to test environment") {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage('Selenium smoke test') {
            steps {
-               sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
            }
          }
          stage("Waiting for manual test environment validation") {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
         stage("Destroying test environment") {
             steps {
-                sleep 10
+              updateMessage("running", messages)
+              /************************************************************/
+              sleep 10
+              /************************************************************/
+              updateMessage("passed", messages)
             }
         }
     }
