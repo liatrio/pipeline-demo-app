@@ -9,13 +9,19 @@ pipeline {
     stages {
         stage('Maven: Build and push artifact to Artifactory') {
             steps {
+                slackMessage([
+                  event: "build-start",
+                  channel: "${env.SLACK_ROOM}",
+                  slackURL: "${env.SLACK_WEBHOOK_URL}",
+                  message: "Maven build start"
+                ])
                 sleep 5
-                  slackMessage([
-                    event: "build-start",
-                    channel: "${env.SLACK_ROOM}",
-                    slackURL: "${env.SLACK_WEBHOOK_URL}",
-                    message: "Maven build complete"
-                  ])
+                slackMessage([
+                  event: "build-complete",
+                  channel: "${env.SLACK_ROOM}",
+                  slackURL: "${env.SLACK_WEBHOOK_URL}",
+                  message: "Maven build complete"
+                ])
             }
         }
         stage('Maven: Analyze code with Sonar') {
