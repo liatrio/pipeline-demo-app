@@ -13,131 +13,131 @@ pipeline {
               script {
                 messages = sendSlackPipeline()
               }
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /******** ****************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Maven: Analyze code with Sonar') {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Build Docker image') {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Push docker image to Artifactory') {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Spin up local container for automated testing') {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Functional test With Selenium') {
  
              steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
                sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
              }
         }
         stage('Gatling performance test') {
 
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Spin down container used for testing') {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Maven: Promote artifact from snapshot to release in Artifactory') {
 
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage("Provisioning test environment") {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage("Deploying to test environment") {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage('Selenium smoke test') {
            steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
            }
          }
          stage("Waiting for manual test environment validation") {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
         stage("Destroying test environment") {
             steps {
-              sendStageRunning("running", messages)
+              sendStageRunning(messages)
               /************************************************************/
               sleep 10
               /************************************************************/
-              sendStageSuccess("passed", messages)
+              sendStageSuccess(messages)
             }
         }
     }
