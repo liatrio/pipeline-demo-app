@@ -3,7 +3,7 @@ library 'pipeline-library@rich-slack'
 pipeline {
   agent any
   environment {
-      SLACK_ROOM = "GDQRNBA7M"
+      SLACK_ROOM = "GDFL2F0V6"
       SLACK_WEBHOOK_URL = "https://liatrio.slack.com"
       SLACK_TOKEN = credentials("pipeline-pal-slack")
   }
