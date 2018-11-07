@@ -11,14 +11,14 @@ pipeline {
     stage('Maven: Build and push artifact to Artifactory') {
       steps {
         script {
-          messages = sendSlackPipeline()
+          message = sendSlackPipeline()
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -28,12 +28,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -43,12 +43,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -58,12 +58,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -73,12 +73,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -88,12 +88,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -103,12 +103,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -118,12 +118,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -133,12 +133,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -148,12 +148,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -163,12 +163,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -178,12 +178,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -193,12 +193,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -208,12 +208,12 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(messages)
+            sendStageRunning(message)
             sleep 10
-            sendStageSuccess(messages)
+            sendStageSuccess(message)
           }
           catch(err){
-            sendPipelineFailure(err.getMessage(), messages)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
