@@ -13,9 +13,9 @@ pipeline {
         script {
           message = sendSlackPipeline()
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -28,9 +28,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -43,9 +43,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -58,9 +58,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -73,9 +73,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -88,9 +88,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -103,9 +103,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -118,9 +118,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -133,9 +133,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -148,9 +148,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -163,9 +163,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -178,9 +178,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -193,9 +193,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
@@ -208,9 +208,9 @@ pipeline {
       steps {
         script {
           try {
-            sendStageRunning(message)
+            message = sendStageRunning(message)
             sleep 10
-            sendStageSuccess(message)
+            message = sendStageSuccess(message)
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
