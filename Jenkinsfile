@@ -18,7 +18,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -33,7 +33,7 @@ pipeline {
             message = sendStageSuccess(message, "Check out the code coverage here")
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -48,7 +48,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -63,7 +63,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -78,7 +78,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -93,7 +93,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -108,7 +108,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -123,7 +123,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -138,7 +138,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -153,7 +153,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -168,7 +168,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -183,7 +183,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -198,7 +198,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
@@ -213,7 +213,7 @@ pipeline {
             message = sendStageSuccess(message)
           }
           catch(err){
-            //sendPipelineFailure(err.getMessage(), message)
+            sendPipelineFailure(err.getMessage(), message)
             throw err
           }
         }
