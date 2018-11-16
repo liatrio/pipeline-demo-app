@@ -30,7 +30,7 @@ pipeline {
           try {
             message = sendStageRunning(message)
             sleep 10
-            message = sendStageSuccess(message)
+            message = sendStageSuccess(message, "Check out the code coverage here")
           }
           catch(err){
             //sendPipelineFailure(err.getMessage(), message)
