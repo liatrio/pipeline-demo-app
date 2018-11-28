@@ -30,7 +30,8 @@ pipeline {
           try {
             message = sendStageRunning(message)
             sleep 10
-            message = sendStageSuccess(message, "Code Coverage 93%")
+            coverage = "Code Coverage" + Math.abs(new Random().nextInt() % 100) + 1
+            message = sendStageSuccess(message, coverage)
           }
           catch(err){
             sendPipelineFailure(err.getMessage(), message)
