@@ -122,7 +122,7 @@ pipeline {
         stage('Gatling performance test') {
             agent {
                 docker {
-                    image 'denvazh/gatling'
+                    image 'denvazh/gatling:2.2.5'
                     args "-u 0:0 --net demo"
                     reuseNode true
                 }
