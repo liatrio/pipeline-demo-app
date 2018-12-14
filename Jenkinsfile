@@ -1,5 +1,5 @@
 #!/bin/env groovy
-library 'pipeline-library@rich-slack-2'
+library 'pipeline-library@rich-slack'
 pipeline {
   agent any
   environment {
