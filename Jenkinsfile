@@ -15,10 +15,7 @@ pipeline {
         ARTIFACTORY_URL = 'https://artifactory.liatr.io'
         BITBUCKET_URL = "http://bitbucket.liatr.io/projects/${PROJECT_KEY}/repos/pipeline-demo-application"
         DOCKER_REPO = "docker.artifactory.liatr.io"
-        AWS_ACCESS_KEY_ID = credentials('AWSaccess')
-        AWS_SECRET_ACCESS_KEY = credentials('AWSsecret')
         SNYK_TOKEN = credentials('snyk')
-        AWS_DEFAULT_REGION = 'us-west-2'
         GROUP_ID = ''
         ARTIFACT_ID = ''
         VERSION = ''
@@ -172,22 +169,28 @@ pipeline {
         }
         stage("Provisioning test environment") {
             when { not { branch 'master' } }
+            environment {
+                TF_IN_AUTOMATION = "true"
+            }
             steps {
                 script {
                     STAGE = env.STAGE_NAME
                     DEV_IP = "${env.BRANCH_NAME}.${APP_NAME}.liatr.io"
                 }
-                withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
-                    slackSend channel: env.SLACK_ROOM, message: "Provisioning test environment"
-                    sh """export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_branch_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME}
-                      terraform init -input=false -no-color -reconfigure -backend-config='key=liatristorage/${env.APP_NAME}/${env.BRANCH_NAME}-terraform.tfstate'
-                      terraform workspace select ${env.APP_NAME}_${env.BRANCH_NAME} -no-color || terraform workspace new ${env.APP_NAME}_${env.BRANCH_NAME} -no-color
-                      terraform plan -out=plan_${env.APP_NAME}_${env.BRANCH_NAME} -input=false -no-color
-                      terraform apply -input=false plan_${env.APP_NAME}_${env.BRANCH_NAME} -no-color
-                      """
+                slackSend channel: env.SLACK_ROOM, message: "Provisioning test environment"
+                wrap([$class: 'BuildUser']) {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS-SVC-Jenkins-non-prod-dev' ]]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'KEY_FILE', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
+                            sh """ 
+                            terraform init -input=false -no-color -force-copy -reconfigure
+                            terraform workspace select ${APP_NAME}_${BRANCH_NAME} -no-color || terraform workspace new ${APP_NAME}_${BRANCH_NAME} -no-color
+                            terraform plan -out=plan_${APP_NAME}_${BRANCH_NAME} -input=false -no-color -var key_file=${KEY_FILE} -var app_name=${APP_NAME} -var branch_name=${BRANCH_NAME} -var 'jenkins_user=${env.BUILD_USER}'
+                            terraform apply -input=false plan_${APP_NAME}_${BRANCH_NAME} -no-color
+                            """
+                        }
+                    }
                 }
                 slackSend channel: env.SLACK_ROOM, message: "Environment provisioned for testing <http://${DEV_IP}|here>"
-
             }
         }
         stage("Deploying to test environment") {
@@ -275,16 +278,23 @@ pipeline {
         }
         stage("Destroying test environment") {
             when { not { branch 'master' } }
+            environment {
+                TF_IN_AUTOMATION = "true"
+            }
             steps {
                 script { STAGE = env.STAGE_NAME }
-                withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
-                    sh """export TF_VAR_key_file=${keyFileVariable} && export TF_VAR_tag=${TAG} && export TF_VAR_branch_name=${env.BRANCH_NAME} && export TF_VAR_app_name=${env.APP_NAME}
-                      terraform init -input=false -no-color -reconfigure -backend-config='key=liatristorage/${env.APP_NAME}/${env.BRANCH_NAME}-terraform.tfstate'
-                      terraform workspace select ${env.APP_NAME}_${env.BRANCH_NAME} -no-color
-                      terraform destroy -force -no-color
-                      """
-                    slackSend channel: env.SLACK_ROOM, message: "Destroyed testing environment"
+                wrap([$class: 'BuildUser']) {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS-SVC-Jenkins-non-prod-dev' ]]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'KEY_FILE', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
+                            sh """ 
+                            terraform init -input=false -no-color -force-copy -reconfigure
+                            terraform workspace select ${APP_NAME}_${BRANCH_NAME} -no-color
+                            terraform destroy -auto-approve -input=false -no-color -var key_file=${KEY_FILE} -var app_name=${APP_NAME} -var branch_name=${BRANCH_NAME} -var 'jenkins_user=${env.BUILD_USER}'
+                            """
+                        }
+                    }
                 }
+                slackSend channel: env.SLACK_ROOM, message: "Destroyed testing environment"
             }
         }
     }
