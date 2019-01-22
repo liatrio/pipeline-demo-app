@@ -134,6 +134,23 @@ pipeline {
                 slackSend channel: env.SLACK_ROOM, message: "Gatling performance test complete"
             }
         }
+        stage('OWASP ZAP security framework') {
+            agent {
+                docker {
+                    image 'owasp/zap2docker-stable'
+                    args '-u root:sudo --net demo -v ${WORKSPACE}:/zap/wrk:rw'
+                    reuseNode true
+                }
+            }
+            environment {
+                CONTAINER_HTTP_URL = "http://${DEV_IP}"
+            }
+            steps {
+                script { STAGE = env.STAGE_NAME }
+                sh "/zap/zap-baseline.py -d -a -j -t http://${DEV_IP}/${APP_NAME}/ -m 1 -c owasp_zap.conf -r OWASPtestreport.html -w OWASPtestreport.md -x OWASPtestreport.xml -n owasp_zap.context"
+                slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: OWASP ZAP Security test complete."
+            }
+        }
         stage('Spin down container used for testing') {
             steps {
                 script {
@@ -216,23 +233,6 @@ pipeline {
                     }
                 }
                 slackSend channel: env.SLACK_ROOM, color: 'good', message: "Application deployed to http://${DEV_IP}/${DEMO_APP_PATH} - waiting on Smoke Test"
-            }
-        }
-        stage('OWASP ZAP security framework') {
-            agent {
-                docker {
-                    image 'owasp/zap2docker-stable'
-                    args '-u root:sudo --net demo -v ${WORKSPACE}:/zap/wrk:rw'
-                    reuseNode true
-                }
-            }
-            environment {
-                CONTAINER_HTTP_URL = "http://${DEV_IP}"
-            }
-            steps {
-                script { STAGE = env.STAGE_NAME }
-                sh "/zap/zap-baseline.py -d -a -j -t http://${DEV_IP}/${APP_NAME}/ -m 1 -c owasp_zap.conf -r OWASPtestreport.html -w OWASPtestreport.md -x OWASPtestreport.xml -n owasp_zap.context"
-                slackSend channel: env.SLACK_ROOM, color: 'good', message: "Success: OWASP ZAP Security test complete."
             }
         }
         stage('Selenium smoke test') {
